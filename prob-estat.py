@@ -12,7 +12,7 @@ class Estatisticas():
         """ 
             Dataframe para guardar os totais de cada região
         """
-        self.brasil = pandas.DataFrame(columns = self.dataframe.columns)
+        self.brasil = pandas.DataFrame()
 
         """ 
             Dataframes para guardar os totais por estado de cada região
@@ -20,11 +20,11 @@ class Estatisticas():
             Ex: self.norte contém as linhas e colunas associadas ao estado do Acre, 
             Amazonas, Roraima, Pará, etc...
         """
-        self.norte = pandas.DataFrame(columns = self.dataframe.columns)
-        self.nordeste = pandas.DataFrame(columns = self.dataframe.columns)
-        self.sudeste = pandas.DataFrame(columns = self.dataframe.columns)
-        self.sul = pandas.DataFrame(columns = self.dataframe.columns)
-        self.centro_oeste = pandas.DataFrame(columns = self.dataframe.columns)
+        self.norte = pandas.DataFrame()
+        self.nordeste = pandas.DataFrame()
+        self.sudeste = pandas.DataFrame()
+        self.sul = pandas.DataFrame()
+        self.centro_oeste = pandas.DataFrame()
 
         self.dividir_dataframes()
 
