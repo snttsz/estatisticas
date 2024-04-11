@@ -1,4 +1,5 @@
 import pandas
+import matplotlib.pyplot as plt
 
 class Estatisticas():
 
@@ -110,15 +111,115 @@ estatisticas = Estatisticas()
 """ 
     Exemplo de uso 
 """
-nome_coluna1 = estatisticas.dataframe.columns[1]
-nome_coluna2 = estatisticas.dataframe.columns[2]
-nome_coluna3 = estatisticas.dataframe.columns[3]
+# nome_coluna1 = estatisticas.dataframe.columns[1]
+# nome_coluna2 = estatisticas.dataframe.columns[2]
+# nome_coluna3 = estatisticas.dataframe.columns[3]
 
-print(f"Media coluna 1 -> {estatisticas.getMedia(dataframe = estatisticas.norte, coluna = nome_coluna1)}")
-print(f"Media coluna 2 -> {estatisticas.getMedia(dataframe = estatisticas.norte, coluna = nome_coluna2)}")
-print(f"Media coluna 3 -> {estatisticas.getMedia(dataframe = estatisticas.norte, coluna = nome_coluna3)}")
+# print(f"Media coluna 1 -> {estatisticas.getMedia(dataframe = estatisticas.norte, coluna = nome_coluna1)}")
+# print(f"Media coluna 2 -> {estatisticas.getMedia(dataframe = estatisticas.norte, coluna = nome_coluna2)}")
+# print(f"Media coluna 3 -> {estatisticas.getMedia(dataframe = estatisticas.norte, coluna = nome_coluna3)}")
+
+dados_regioes = {
+    "Norte": estatisticas.norte,
+    "Sul" : estatisticas.sul,
+    "Nordeste" : estatisticas.nordeste,
+    "Centro Oeste" : estatisticas.centro_oeste,
+    "Sudeste" : estatisticas.sudeste
+}
+
+def gerar_media_de_participantes_da_pesquisa():
+    
+    nome_coluna = estatisticas.dataframe.columns[1]
+    
+    # Calcula a media e desvio padrão
+    regioes = list(dados_regioes.keys())
+    medias = [dados[nome_coluna].mean() for dados in dados_regioes.values()]
+    
+    # Plota no grafico
+    plt.figure(figsize=(14, 8))
+    barras = plt.bar(regioes, medias, capsize=5)
+    plt.xlabel('Região')
+    plt.ylabel('Média de pessoas (por 1000 pessoas)')
+    plt.title('Média de pessoas de 10 anos ou mais de idade que utilizaram a Internet para o estudo por região do país')
+    plt.xticks(rotation=45)
+    
+    # Define referências no eixo y
+    max_mediana = max(medias)
+    referencias_y = range(0, int(max_mediana) + 1000, 1000)
+    plt.yticks(referencias_y)
+    
+    # Adiciona referencias para as barras
+    for barra in barras:
+        yval = barra.get_height()
+        plt.axhline(y=yval, color='gray', linestyle='--', linewidth=0.5, zorder = 0)
+        plt.text(barra.get_x() + barra.get_width()/2, yval + 0.2, round(yval), ha='center', va='bottom')
+    
+    plt.show()
 
 
+def gerar_moda_de_participantes_da_pesquisa():
+    
+    nome_coluna = estatisticas.dataframe.columns[1]
+    
+    # Calcula a moda
+    regioes = list(dados_regioes.keys())
+    modas = [dados[nome_coluna].mode().iloc[0] for dados in dados_regioes.values()]
+    
+    # Plota no grafico
+    plt.figure(figsize=(14, 8))
+    barras = plt.bar(regioes, modas, capsize=5, color="green")
+    plt.xlabel('Região')
+    plt.ylabel('Moda da quantidade de pessoas (por 1000 pessoas)')
+    plt.title('Moda da quantidade de pessoas de 10 anos ou mais de idade que utilizaram a Internet para o estudo por região do país')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    
+    # Define referências no eixo y
+    max_mediana = max(modas)
+    referencias_y = range(0, int(max_mediana) + 1000, 1000)
+    plt.yticks(referencias_y)
+    
+    # Adiciona referencias para as barras
+    for barra in barras:
+        yval = barra.get_height()
+        plt.axhline(y=yval, color='gray', linestyle='--', linewidth=0.5, zorder = 0)
+        plt.text(barra.get_x() + barra.get_width()/2, yval + 0.2, round(yval), ha='center', va='bottom')
+    
+    plt.show()
+    
+
+def gerar_mediana_de_participantes_da_pesquisa():
+    nome_coluna = estatisticas.dataframe.columns[1]
+    
+    # Calcula a mediana
+    regioes = list(dados_regioes.keys())
+    medianas = [dados[nome_coluna].median() for dados in dados_regioes.values()]
+    
+    # Plota no grafico
+    plt.figure(figsize=(14, 8))
+    barras = plt.bar(regioes, medianas, capsize=5, color="purple")
+    plt.xlabel('Região')
+    plt.ylabel('Mediana da quantidade de pessoas (por 1000 pessoas)')
+    plt.title('Mediana da quantidade de pessoas de 10 anos ou mais de idade que utilizaram a Internet para o estudo por região do país')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    
+    # Define referências no eixo y
+    max_mediana = max(medianas)
+    referencias_y = range(0, int(max_mediana) + 1000, 1000)
+    plt.yticks(referencias_y)
+    
+    # Adiciona referencias para as barras
+    for barra in barras:
+        yval = barra.get_height()
+        plt.axhline(y=yval, color='gray', linestyle='--', linewidth=0.5, zorder = 0)
+        plt.text(barra.get_x() + barra.get_width()/2, yval + 0.2, round(yval), ha='center', va='bottom')
+    
+    plt.show()
 
 
-
+if __name__ == "__main__":
+    
+    gerar_media_de_participantes_da_pesquisa()
+    gerar_moda_de_participantes_da_pesquisa()
+    gerar_mediana_de_participantes_da_pesquisa()
