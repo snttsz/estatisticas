@@ -121,10 +121,10 @@ estatisticas = Estatisticas()
 
 dados_regioes = {
     "Norte": estatisticas.norte,
-    "Sul" : estatisticas.sul,
     "Nordeste" : estatisticas.nordeste,
-    "Centro Oeste" : estatisticas.centro_oeste,
-    "Sudeste" : estatisticas.sudeste
+    "Sudeste" : estatisticas.sudeste,
+    "Sul" : estatisticas.sul,
+    "Centro Oeste" : estatisticas.centro_oeste
 }
 
 def gerar_media_de_participantes_da_pesquisa():
@@ -218,8 +218,35 @@ def gerar_mediana_de_participantes_da_pesquisa():
     plt.show()
 
 
-if __name__ == "__main__":
+def gerar_histograma_de_participantes_da_pesquisa():
+
+    regioes = list(dados_regioes.keys())
+
+    for nome_coluna in estatisticas.dataframe.columns[1:]:
+
+        #Pegando os dados de cada coluna
+        frequencias_brasil = estatisticas.brasil[nome_coluna]
+
+        # Plota no grafico
+        plt.figure(figsize=(14, 8))
+        barras = plt.bar(regioes, frequencias_brasil, capsize=5)
+        plt.xlabel('Região')
+        plt.ylabel('Histograma de pessoas (por 1000 pessoas)')
+        plt.title('Histograma de ' + nome_coluna)
+        plt.xticks(rotation=45)
     
+        # Adiciona referencias para as barras
+        for barra in barras:
+            yval = barra.get_height()
+            plt.axhline(y=yval, color='gray', linestyle='--', linewidth=0.5, zorder = 0)
+            plt.text(barra.get_x() + barra.get_width()/2, yval + 0.2, round(yval), ha='center', va='bottom')
+
+        plt.show()
+    
+
+if __name__ == "__main__":
+
     gerar_media_de_participantes_da_pesquisa()
     gerar_moda_de_participantes_da_pesquisa()
     gerar_mediana_de_participantes_da_pesquisa()
+    gerar_histograma_de_participantes_da_pesquisa()
