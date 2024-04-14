@@ -1,4 +1,5 @@
 import pandas
+import numpy as np
 import matplotlib.pyplot as plt
 
 class Estatisticas():
@@ -218,7 +219,10 @@ def gerar_mediana_de_participantes_da_pesquisa():
     plt.show()
 
 
-def gerar_histograma_de_participantes_da_pesquisa():
+def gerar_histograma_polígonoeDeFrequencia_de_participantes_da_pesquisa():
+    """ 
+    Método responsável por gerar histograma de frequência juntamente com polígonos de frequência de cada coluna
+       """
 
     regioes = list(dados_regioes.keys())
 
@@ -227,12 +231,22 @@ def gerar_histograma_de_participantes_da_pesquisa():
         #Pegando os dados de cada coluna
         frequencias_brasil = estatisticas.brasil[nome_coluna]
 
-        # Plota no grafico
+
+        #Plota o histograma
         plt.figure(figsize=(14, 8))
         barras = plt.bar(regioes, frequencias_brasil, capsize=5)
+
+        # Calcula os pontos médios de cada barra do histograma
+        pontos_medios = [(barra.get_x() + barra.get_width() / 2, barra.get_height()) for barra in barras]
+        
+        # Plota o polígono de frequência
+        x, y = zip(*pontos_medios)  # Separa os pontos x e y
+        plt.plot(x, y, marker='o', linestyle='-', color='r')
+        
+        # Plota no grafico
         plt.xlabel('Região')
-        plt.ylabel('Histograma de pessoas (por 1000 pessoas)')
-        plt.title('Histograma de ' + nome_coluna)
+        plt.ylabel('Distribuição de pessoas (por 1000 pessoas)')
+        plt.title('Distribuição de ' + nome_coluna)
         plt.xticks(rotation=45)
     
         # Adiciona referencias para as barras
@@ -249,4 +263,4 @@ if __name__ == "__main__":
     gerar_media_de_participantes_da_pesquisa()
     gerar_moda_de_participantes_da_pesquisa()
     gerar_mediana_de_participantes_da_pesquisa()
-    gerar_histograma_de_participantes_da_pesquisa()
+    gerar_histograma_polígonoeDeFrequencia_de_participantes_da_pesquisa()
