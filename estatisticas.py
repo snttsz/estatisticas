@@ -1,5 +1,6 @@
 import pandas
 import numpy as np
+import seaborn as sns
 import matplotlib.pyplot as plt
 
 class Estatisticas():
@@ -219,48 +220,84 @@ def gerar_mediana_de_participantes_da_pesquisa():
     plt.show()
 
 
-def gerar_histograma_polígonoeDeFrequencia_de_participantes_da_pesquisa():
-    """ 
-    Método responsável por gerar histograma de frequência juntamente com polígonos de frequência de cada coluna
-       """
+def gerar_histograma():
 
-    regioes = list(dados_regioes.keys())
+    #Obtendo dataframe
+    dataFrame = estatisticas.brasil
 
-    for nome_coluna in estatisticas.dataframe.columns[1:]:
+    #Obtendo os intervalos do eixo x  
+    grupos_eixo_x = dataFrame.keys()[2:]
 
-        #Pegando os dados de cada coluna
-        frequencias_brasil = estatisticas.brasil[nome_coluna]
+    for index, row in dataFrame.iterrows():
 
+        dados = row.values
+        nome_regiao = dados[0]
+        plt.figure(num=f"Histograma da Região {nome_regiao}", figsize=(14, 8))
 
-        #Plota o histograma
-        plt.figure(figsize=(14, 8))
-        barras = plt.bar(regioes, frequencias_brasil, capsize=5)
-
-        # Calcula os pontos médios de cada barra do histograma
-        pontos_medios = [(barra.get_x() + barra.get_width() / 2, barra.get_height()) for barra in barras]
-        
-        # Plota o polígono de frequência
-        x, y = zip(*pontos_medios)  # Separa os pontos x e y
-        plt.plot(x, y, marker='o', linestyle='-', color='r')
-        
-        # Plota no grafico
-        plt.xlabel('Região')
-        plt.ylabel('Distribuição de pessoas (por 1000 pessoas)')
-        plt.title('Distribuição de ' + nome_coluna)
-        plt.xticks(rotation=45)
-    
-        # Adiciona referencias para as barras
-        for barra in barras:
-            yval = barra.get_height()
-            plt.axhline(y=yval, color='gray', linestyle='--', linewidth=0.5, zorder = 0)
-            plt.text(barra.get_x() + barra.get_width()/2, yval + 0.2, round(yval), ha='center', va='bottom')
+        plt.title(f"Histograma da Região {nome_regiao} \n")
+        plt.bar(grupos_eixo_x, dados[2:], capsize=5, color="purple")
+        plt.xlabel("\nGrupos de anos de estudo Sem instrução")
+        plt.ylabel("Quantidade de usuários", labelpad=20)
 
         plt.show()
-    
+
+def gerar_poligono_frequencia():
+
+ # Obtendo dataframe
+    dataFrame = estatisticas.brasil
+
+    # Obtendo os intervalos do eixo x
+    grupos_eixo_x = dataFrame.keys()[2:]
+
+    for index, row in dataFrame.iterrows():
+
+        dados = row.values
+        nome_regiao = dados[0]
+        plt.figure(num=f"Polígono de frequência absoluta da Região {nome_regiao}", figsize=(14, 8))
+
+        plt.title(f"Polígono de frequência absoluta da Região {nome_regiao} \n")
+        plt.bar(grupos_eixo_x, dados[2:], capsize=5, color="purple")
+        plt.xlabel("\nGrupos de anos de estudo Sem instrução")
+        plt.ylabel("Quantidade de usuários", labelpad=20)
+
+        # Plotar polígono de frequência
+        plt.plot(grupos_eixo_x, dados[2:], marker='o', linestyle='-')
+
+        plt.show()
+
+def gerar_poligono_frequencia_acumulada():
+
+ # Obtendo dataframe
+    dataFrame = estatisticas.brasil
+
+    # Obtendo os intervalos do eixo x
+    grupos_eixo_x = dataFrame.keys()[2:]
+
+    for index, row in dataFrame.iterrows():
+
+        dados = row.values
+        nome_regiao = dados[0]
+
+        plt.figure(num=f"Polígono de frequência acumulada da Região {nome_regiao}", figsize=(14, 8))
+        plt.title(f"Polígono de frequência acumulada da Região {nome_regiao} \n")
+
+        # Calculando frequências acumuladas
+        frequencias = dados[2:]
+        frequencias_acumuladas = np.cumsum(frequencias)
+
+        plt.bar(grupos_eixo_x, frequencias, capsize=5, color="purple")
+        plt.xlabel("\nGrupos de anos de estudo Sem instrução")
+        plt.ylabel("Quantidade de usuários", labelpad=20)
+
+        # Plotar polígono de frequência
+        plt.plot(grupos_eixo_x, frequencias_acumuladas, marker='o', linestyle='-')
+
+        plt.show()
+
 
 if __name__ == "__main__":
 
-    gerar_media_de_participantes_da_pesquisa()
-    gerar_moda_de_participantes_da_pesquisa()
-    gerar_mediana_de_participantes_da_pesquisa()
-    gerar_histograma_polígonoeDeFrequencia_de_participantes_da_pesquisa()
+    #gerar_media_de_participantes_da_pesquisa()
+    #gerar_moda_de_participantes_da_pesquisa()
+    #gerar_mediana_de_participantes_da_pesquisa()
+    gerar_poligono_frequencia_acumulada()
